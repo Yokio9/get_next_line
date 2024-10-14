@@ -22,8 +22,6 @@ char	*error(FILE *txt)
 char *get_next_line(int fd)
 {
 	static FILE	*txt;
-	static int	line_read;
-	int			i;
 	char		str[BUFFER_SIZE];
 	char		*output;
 
@@ -34,14 +32,7 @@ char *get_next_line(int fd)
 		if (txt == NULL)
 			return (NULL);
 	}
-	i = line_read;
-	if (i > 0)
-	{
-		output = fgets(str, BUFFER_SIZE, txt);
-		if(!output)
-			return (error(txt));
-	}
-	line_read++;
+	output = fgets(str, BUFFER_SIZE, txt);
 	if(!output)
 		return (error(txt));
 	return (strdup(str));
