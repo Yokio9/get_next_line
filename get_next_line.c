@@ -1,23 +1,11 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 42
 #endif
-
-void	ft_putstr(char *str)
-{
-	while (*str)
-		write(1, str++, 1);
-}
-char	*error(FILE *txt)
-{
-	fclose(txt);
-	txt = NULL;
-	return (NULL);
-}
 
 char *get_next_line(int fd)
 {

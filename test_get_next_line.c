@@ -1,28 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 5
 #endif
 
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	char	*joined;
-	size_t	len;
-
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	joined = (char *)malloc(sizeof(char) * len);
-	if (!joined)
-		return (NULL);
-	joined[0] = '\0';
-	ft_strlcat(joined, (char *)s1, len);
-	ft_strlcat(joined, (char *)s2, len);
-	return (joined);
-}
-
-int	*ft_strchr(const char *s, int c)
+int	ft_char_found(const char *s, int c)
 {
 	int	i;
 
@@ -35,7 +17,7 @@ int	*ft_strchr(const char *s, int c)
 	}
 	if (s[i] == (char)c)
 		return (i + 1);
-	return (NULL);
+	return (0);
 }
 
 char *get_next_line(int fd)
@@ -43,17 +25,33 @@ char *get_next_line(int fd)
 	static char	*str;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
+	int			index;
+	int			chr_read;
 
-	while (read(fd, buffer, BUFFER_SIZE) > 0)
+	while ((chr_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
+		buffer[chr_read] = '\0';
 		str = ft_strjoin(str, buffer);
-		if (ft_strchr(str, '\n')) //strrchr retourne l'index apres le \n
+		index = ft_char_found(str, '\n');
+		if (index)
 		{
-			line = ft_strjoin(); //coller de str a str + le resultat de strchr
+			line = calloc(index + 1, sizeof(char));
+			ft_strlcpy(line, str, index);
+			str = ft_strjoin("", str + index);
+			return (line);
 		}
 	}
+	if (read(fd, buffer, BUFFER_SIZE) == 0)
+	{
+		line = ft_strdup(str);
+		free(str);
+		str = NULL;
+		return (line);
+	}
+	return (NULL);
 }
 
+#include <stdio.h>
 int main()
 {
 	FILE	*fichier;
@@ -66,12 +64,11 @@ int main()
 		str = get_next_line(fd);
 		while (str != NULL)
 		{
-			printf("%s", str);
+			printf("%s\n", str);
 			free(str);
 			str = get_next_line(fd);
 		}
 		fclose(fichier);
 	}
-	printf("\n\nbuffer size: %d", BUFFER_SIZE);
 	return (0);
 }
