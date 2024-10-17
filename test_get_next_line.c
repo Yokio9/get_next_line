@@ -4,44 +4,55 @@
 #include <string.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 5
 #endif
 
-void	ft_putstr(char *str)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	while (*str)
-		write(1, str++, 1);
+	char	*joined;
+	size_t	len;
+
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	joined = (char *)malloc(sizeof(char) * len);
+	if (!joined)
+		return (NULL);
+	joined[0] = '\0';
+	ft_strlcat(joined, (char *)s1, len);
+	ft_strlcat(joined, (char *)s2, len);
+	return (joined);
 }
-char	*error(FILE *txt)
+
+int	*ft_strchr(const char *s, int c)
 {
-	fclose(txt);
-	txt = NULL;
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i + 1);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return (i + 1);
 	return (NULL);
 }
 
 char *get_next_line(int fd)
 {
-	static FILE	*txt;
-	char		str[BUFFER_SIZE];
-	char		*output;
+	static char	*str;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*line;
 
-	memset(str, 0, BUFFER_SIZE);
-	if (txt == NULL)
+	while (read(fd, buffer, BUFFER_SIZE) > 0)
 	{
-		txt = fdopen(fd, "r");
-		if (txt == NULL)
-			return (NULL);
+		str = ft_strjoin(str, buffer);
+		if (ft_strchr(str, '\n')) //strrchr retourne l'index apres le \n
+		{
+			line = ft_strjoin(); //coller de str a str + le resultat de strchr
+		}
 	}
-	output = fgets(str, BUFFER_SIZE, txt);
-	if(!output)
-		return (error(txt));
-	return (strdup(str));
 }
-
-// Almost works perfectly
-// Only need to make this work and we're all good
-// Votre fonction marche-t-elle encore si la valeur de BUFFER_SIZE
-// est de 9999? Ou de 1 ? Ou encore de 10 000 000 ? Savez-vous pourquoi ?
 
 int main()
 {
