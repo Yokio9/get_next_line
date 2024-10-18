@@ -1,3 +1,3 @@
-hello world\n
-you good ?\n
+hello world
+you good ?
 esta bien

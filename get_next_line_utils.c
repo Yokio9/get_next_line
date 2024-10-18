@@ -40,7 +40,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size)
 	i = 0;
 	if (dst_size > 0)
 	{
-		while (src[i] && i < dst_size - 1)
+		while ((src[i] || src[i] == '\n') && i < dst_size - 1)
 		{
 			dst[i] = src[i];
 			i++;

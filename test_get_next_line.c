@@ -41,7 +41,7 @@ char *get_next_line(int fd)
 			return (line);
 		}
 	}
-	if (read(fd, buffer, BUFFER_SIZE) == 0)
+	if (*buffer)
 	{
 		line = ft_strdup(str);
 		free(str);
