@@ -1,36 +1,101 @@
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
+/*   Updated: 2024/10/19 10:28:35 by dimatayi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 5
 #endif
+
+int	ft_char_found(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i + 1);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return (i + 1);
+	return (0);
+}
+
+void	free_me(char *str)
+{
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
+}
+
+char	*lst_chr(char *buffer, char **line, char **str)
+{
+	if (*buffer)
+	{
+		*line = ft_strdup(*str);
+		if (!(*line))
+			return (NULL);
+		return (*line);
+	}
+	else
+	{
+		free_me(*str);
+		free_me(*line);
+		return (NULL);
+	}
+}
+
+char	*management(int index, char **line, char **str, char *buffer)
+{
+	*line = calloc(index + 1, sizeof(char));
+	if (!*line)
+		return (NULL);
+	ft_strlcpy(*line, *str, index);
+	*str = ft_strjoin("", *str + index);
+	if (!*str)
+		return (NULL);
+	memset(buffer, 0, BUFFER_SIZE);
+	return (*line);
+}
 
 char *get_next_line(int fd)
 {
-	static FILE	*txt;
-	char		str[BUFFER_SIZE];
-	char		*output;
+	static char	*str;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*line;
+	int			index;
+	int			chr_read;
 
-	memset(str, 0, BUFFER_SIZE);
-	if (txt == NULL)
+	while ((chr_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		txt = fdopen(fd, "r");
-		if (txt == NULL)
+		buffer[chr_read] = '\0';
+		str = ft_strjoin(str, buffer);
+		if (!str)
 			return (NULL);
+		index = ft_char_found(str, '\n');
+		if (index)
+		{
+			line = management(index, &line, &str, buffer);
+			return (line);
+		}
 	}
-	output = fgets(str, BUFFER_SIZE, txt);
-	if(!output)
-		return (error(txt));
-	return (strdup(str));
+	return (lst_chr(buffer, &line, &str));
 }
 
-// Almost works perfectly
-// Only need to make this work and we're all good
-// Votre fonction marche-t-elle encore si la valeur de BUFFER_SIZE
-// est de 9999? Ou de 1 ? Ou encore de 10 000 000 ? Savez-vous pourquoi ?
-
+#include <stdio.h>
 int main()
 {
 	FILE	*fichier;
@@ -49,6 +114,5 @@ int main()
 		}
 		fclose(fichier);
 	}
-	printf("\n\nbuffer size: %d", BUFFER_SIZE);
 	return (0);
 }
