@@ -32,13 +32,11 @@ int	ft_char_found(const char *s, int c)
 	return (0);
 }
 
-void	free_me(char *str)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	if (str)
-	{
-		free(str);
-		str = NULL;
-	}
+	while (n--)
+		((char *)s)[n] = c;
+	return (s);
 }
 
 char	*lst_chr(char *buffer, char **line, char **str)
@@ -52,8 +50,16 @@ char	*lst_chr(char *buffer, char **line, char **str)
 	}
 	else
 	{
-		free_me(*str);
-		free_me(*line);
+		if (*str)
+		{
+			free(*str);
+			*str = NULL;
+		}
+		if (*line)
+		{
+			free(*line);
+			*line = NULL;
+		}
 		return (NULL);
 	}
 }
@@ -67,7 +73,7 @@ char	*management(int index, char **line, char **str, char *buffer)
 	*str = ft_strjoin("", *str + index);
 	if (!*str)
 		return (NULL);
-	memset(buffer, 0, BUFFER_SIZE);
+	ft_memset(buffer, 0, BUFFER_SIZE);
 	return (*line);
 }
 
