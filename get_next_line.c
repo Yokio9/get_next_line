@@ -12,10 +12,6 @@
 
 #include "get_next_line.h"
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 5
-#endif
-
 int	ft_char_found(const char *s, int c)
 {
 	int	i;
@@ -43,6 +39,8 @@ char	*lst_chr(char *buffer, char **line, char **str)
 {
 	if (*buffer)
 	{
+		free(buffer);
+		buffer = NULL;
 		*line = ft_strdup(*str);
 		if (!(*line))
 			return (NULL);
@@ -66,13 +64,17 @@ char	*lst_chr(char *buffer, char **line, char **str)
 
 char	*management(int index, char **line, char **str, char *buffer)
 {
+	char *temp;
 	*line = calloc(index + 1, sizeof(char));
 	if (!*line)
 		return (NULL);
 	ft_strlcpy(*line, *str, index);
-	*str = ft_strjoin("", *str + index);
+	temp = ft_strdup(*str);
+	free(*str);
+	*str = ft_strdup(temp + index);
 	if (!*str)
 		return (NULL);
+	free(temp);
 	ft_memset(buffer, 0, BUFFER_SIZE);
 	return (*line);
 }
@@ -80,22 +82,30 @@ char	*management(int index, char **line, char **str, char *buffer)
 char *get_next_line(int fd)
 {
 	static char	*str;
-	char		buffer[BUFFER_SIZE + 1];
+	char		*buffer;
 	char		*line;
 	int			index;
 	int			chr_read;
 
-	while ((chr_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	chr_read = 1;
+	while (chr_read > 0 && fd > 0 && BUFFER_SIZE > 0)
 	{
-		buffer[chr_read] = '\0';
-		str = ft_strjoin(str, buffer);
-		if (!str)
-			return (NULL);
-		index = ft_char_found(str, '\n');
-		if (index)
+		chr_read = read(fd, buffer, BUFFER_SIZE);
+		if (chr_read || str)
 		{
-			line = management(index, &line, &str, buffer);
-			return (line);
+			buffer[chr_read] = '\0';
+			str = ft_strjoin(str, buffer);
+			if (!str)
+				return (NULL);
+			index = ft_char_found(str, '\n');
+			if (index)
+			{
+				line = management(index, &line, &str, buffer);
+				return (line);
+			}
 		}
 	}
 	return (lst_chr(buffer, &line, &str));
