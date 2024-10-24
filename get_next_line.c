@@ -68,7 +68,7 @@ char	*management(int index, char **line, char **str, char *buffer)
 	*line = calloc(index + 1, sizeof(char));
 	if (!*line)
 		return (NULL);
-	ft_strlcpy(*line, *str, index);
+	ft_strlcpy(*line, *str, index + 1);
 	temp = ft_strdup(*str);
 	free(*str);
 	*str = ft_strdup(temp + index);
@@ -88,24 +88,23 @@ char *get_next_line(int fd)
 	int			chr_read;
 
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
+	if (!buffer || BUFFER_SIZE <= 0)
 		return (NULL);
 	chr_read = 1;
 	while (chr_read > 0 && fd > 0 && BUFFER_SIZE > 0)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
-		if (chr_read || str)
+		if (!chr_read && !str)
+			return (NULL);
+		buffer[chr_read] = '\0';
+		str = ft_strjoin(str, buffer);
+		if (!str)
+			return (NULL);
+		index = ft_char_found(str, '\n');
+		if (index)
 		{
-			buffer[chr_read] = '\0';
-			str = ft_strjoin(str, buffer);
-			if (!str)
-				return (NULL);
-			index = ft_char_found(str, '\n');
-			if (index)
-			{
-				line = management(index, &line, &str, buffer);
-				return (line);
-			}
+			line = management(index, &line, &str, buffer);
+			return (line);
 		}
 	}
 	return (lst_chr(buffer, &line, &str));
