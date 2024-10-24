@@ -28,13 +28,6 @@ int	ft_char_found(const char *s, int c)
 	return (0);
 }
 
-void	*ft_memset(void *s, int c, size_t n)
-{
-	while (n--)
-		((char *)s)[n] = c;
-	return (s);
-}
-
 char	*lst_chr(char *buffer, char **line, char **str)
 {
 	if (*buffer)
@@ -62,7 +55,7 @@ char	*lst_chr(char *buffer, char **line, char **str)
 	}
 }
 
-char	*management(int index, char **line, char **str, char *buffer)
+char	*management(int index, char **line, char **str, char **buffer)
 {
 	char *temp;
 	*line = calloc(index + 1, sizeof(char));
@@ -75,7 +68,7 @@ char	*management(int index, char **line, char **str, char *buffer)
 	if (!*str)
 		return (NULL);
 	free(temp);
-	ft_memset(buffer, 0, BUFFER_SIZE);
+	free(*buffer);
 	return (*line);
 }
 
@@ -91,19 +84,25 @@ char *get_next_line(int fd)
 	if (!buffer || BUFFER_SIZE <= 0)
 		return (NULL);
 	chr_read = 1;
-	while (chr_read > 0 && fd > 0 && BUFFER_SIZE > 0)
+	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
-		if (!chr_read && !str)
+		if (chr_read <= 0 && !str)
+		{
+			free(buffer);
 			return (NULL);
+		}
 		buffer[chr_read] = '\0';
 		str = ft_strjoin(str, buffer);
 		if (!str)
+		{
+			free(buffer);
 			return (NULL);
+		}
 		index = ft_char_found(str, '\n');
 		if (index)
 		{
-			line = management(index, &line, &str, buffer);
+			line = management(index, &line, &str, &buffer);
 			return (line);
 		}
 	}
