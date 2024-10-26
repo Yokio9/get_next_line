@@ -89,7 +89,7 @@ char *get_next_line(int fd)
 		chr_read = read(fd, buffer, BUFFER_SIZE);
 		if (chr_read <= 0 && !str)
 		{
-			free(buffer);
+			free(buffer); // write line 92 and 03 in a function for here and for 99 and 100
 			return (NULL);
 		}
 		buffer[chr_read] = '\0';
@@ -115,7 +115,7 @@ int main()
 	FILE	*fichier;
 	int		fd;
 	char	*str;
-	fichier = fopen("test.txt", "r");
+	fichier = fopen("test.txt", "w");
 	if (fichier)
 	{
 		fd = fileno (fichier);

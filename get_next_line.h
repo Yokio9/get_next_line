@@ -17,6 +17,6 @@ size_t	ft_strlen(const char *s);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memset(void *s, int c, size_t n);
 char	*lst_chr(char *buffer, char **line, char **str);
-char	*management(int index, char **line, char **str, char *buffer);
+char	*management(int index, char **line, char **str, char **buffer);
 
 #endif
