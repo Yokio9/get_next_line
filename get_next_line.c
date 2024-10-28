@@ -84,6 +84,8 @@ char *get_next_line(int fd)
 	if (!buffer || BUFFER_SIZE <= 0)
 		return (NULL);
 	chr_read = 1;
+	memset(buffer, 0, BUFFER_SIZE + 1);
+	line = NULL;
 	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
