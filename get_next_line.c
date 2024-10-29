@@ -64,62 +64,12 @@ int	ft_char_found(const char *s, int c)
 	return (0);
 }
 
-char	*lst_chr(char *buffer, char **line, char **str)
-{
-	if (*buffer)
-	{
-		free(buffer);
-		buffer = NULL;
-		*line = ft_strdup(*str);
-		if (!(*line))
-			return (NULL);
-		return (*line);
-	}
-	else
-	{
-		if (*str)
-		{
-			*line = ft_strdup(*str);
-			free(*str);
-			*str = NULL;
-			return (*line);
-		}
-		else if (*line)
-		{
-			free(*line);
-			*line = NULL;
-		}
-		return (NULL);
-	}
-}
-
 void	*free_me(char *str)
 {
 	free(str);
 	str = NULL;
 	return (NULL);
 }
-
-char	*management(int index, char **line, char **str, char **buffer)
-{
-	char *temp;
-	*line = calloc(index + 1, sizeof(char));
-	if (!*line)
-		return (NULL);
-	ft_strlcpy(*line, *str, index + 1);
-	temp = ft_strdup(*str);
-	free(*str);
-	*str = ft_strdup(temp + index);
-	if (!*str)
-		return (NULL);
-	free(temp);
-	free(*buffer);
-	return (*line);
-}
-/* char	*last_line(char *str)
-{
-
-} */
 
 char *get_next_line(int fd)
 {
@@ -130,6 +80,7 @@ char *get_next_line(int fd)
 	int			chr_read;
 
 	line = NULL;
+	str = NULL;
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
 	{
@@ -164,8 +115,6 @@ char *get_next_line(int fd)
 			return (line);
 		}
 	}
-	free_me(buffer);
-	free_me(line);
 	return (str);
 	//return (lst_chr(buffer, &line, &str));
 }
@@ -178,7 +127,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("test2.txt", O_RDONLY);
+	fd = open("test.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);

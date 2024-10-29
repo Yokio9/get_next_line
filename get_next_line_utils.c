@@ -29,6 +29,7 @@ char	*ft_strdup(const char *src)
 char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
+	//char	*temp;
 	size_t	len;
 
 	if (!s1)
