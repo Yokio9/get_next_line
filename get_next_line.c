@@ -6,11 +6,47 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/19 10:28:35 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:34:41 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_calloc(size_t elem, size_t size)
+{
+	void	*p;
+
+	p = malloc(elem * size);
+	if (!p)
+		return (NULL);
+	while (elem--)
+		((char *)p)[elem] = 0;
+	return (p);
+}
+
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+
+	if (!dest && !src && n > 0)
+		return (NULL);
+	if ((dest < src) && (dest + n > src))
+	{
+		i = 0;
+		while (i < n)
+		{
+			((char *)dest)[i] = ((const char *)src)[i];
+			i++;
+		}
+		return (dest);
+	}
+	else
+	{
+		while (n--)
+			((char *)dest)[n] = ((const char *)src)[n];
+		return (dest);
+	}
+}
 
 int	ft_char_found(const char *s, int c)
 {
@@ -43,16 +79,25 @@ char	*lst_chr(char *buffer, char **line, char **str)
 	{
 		if (*str)
 		{
+			*line = ft_strdup(*str);
 			free(*str);
 			*str = NULL;
+			return (*line);
 		}
-		if (*line)
+		else if (*line)
 		{
 			free(*line);
 			*line = NULL;
 		}
 		return (NULL);
 	}
+}
+
+void	*free_me(char *str)
+{
+	free(str);
+	str = NULL;
+	return (NULL);
 }
 
 char	*management(int index, char **line, char **str, char **buffer)
@@ -71,6 +116,10 @@ char	*management(int index, char **line, char **str, char **buffer)
 	free(*buffer);
 	return (*line);
 }
+/* char	*last_line(char *str)
+{
+
+} */
 
 char *get_next_line(int fd)
 {
@@ -80,47 +129,58 @@ char *get_next_line(int fd)
 	int			index;
 	int			chr_read;
 
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer || BUFFER_SIZE <= 0)
-		return (NULL);
-	chr_read = 1;
-	memset(buffer, 0, BUFFER_SIZE + 1);
 	line = NULL;
+	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	chr_read = 1;
 	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
-		if (chr_read <= 0 && !str)
-		{
-			free(buffer); // write line 92 and 03 in a function for here and for 99 and 100
-			return (NULL);
-		}
+		if (!chr_read)
+			break;
+/* 		if (chr_read <= 0 && !str)
+			free_me(buffer); */
 		buffer[chr_read] = '\0';
-		str = ft_strjoin(str, buffer);
+		str = gnl_strjoin(str, buffer);
 		if (!str)
 		{
-			free(buffer);
-			return (NULL);
+			return (free_me(buffer));
 		}
 		index = ft_char_found(str, '\n');
 		if (index)
 		{
-			line = management(index, &line, &str, &buffer);
+			line = ft_calloc(index + 1, sizeof(char));
+			if (!line)
+			{
+				free_me(buffer);
+			}
+			ft_strlcpy(line, str, index + 1);
+			str = ft_memmove(str, str + index, ft_strlen(str - index));
+			//line = management(index, &line, &str, &buffer);
 			return (line);
 		}
 	}
-	return (lst_chr(buffer, &line, &str));
+	free_me(buffer);
+	free_me(line);
+	return (str);
+	//return (lst_chr(buffer, &line, &str));
 }
 
 #include <stdio.h>
+#include <fcntl.h>
+
 int main()
 {
-	FILE	*fichier;
-	int		fd;
-	char	*str;
-	fichier = fopen("test.txt", "w");
-	if (fichier)
+	int fd;
+	char *str;
+
+	fd = open("test2.txt", O_RDONLY);
+	if (fd)
 	{
-		fd = fileno (fichier);
 		str = get_next_line(fd);
 		while (str != NULL)
 		{
@@ -128,7 +188,7 @@ int main()
 			free(str);
 			str = get_next_line(fd);
 		}
-		fclose(fichier);
+		close(fd);
 	}
-	return (0);
+	return 0;
 }
