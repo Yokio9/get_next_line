@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/30 17:22:45 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:38:12 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char *get_next_line(int fd)
 	return (line);
 }
 
-/* #include <stdio.h>
+#include <stdio.h>
 #include <fcntl.h>
 
 int main()
@@ -119,7 +119,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("variable_nls.txt", O_RDONLY);
+	fd = open("multiple_nlx5.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);
@@ -133,4 +133,3 @@ int main()
 	}
 	return 0;
 }
- */
