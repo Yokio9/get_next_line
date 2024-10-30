@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:17:36 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:47:39 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,23 @@ void	*free_me(char *str)
 char	*last_line(char *str, char *buffer)
 {
 	char *temp;
+	int	strlen;
 
+	if (buffer)
+		free_me(buffer);
 	if (str)
 	{
-		temp = (char *)ft_calloc(ft_strlen(str) + 1, sizeof(char));
+		strlen = ft_strlen(str);
+		temp = (char *)ft_calloc(strlen + 1, sizeof(char));
 		if (!temp)
 			return (NULL);
-		ft_strlcat(temp, str, ft_strlen(str) + 1);
+		if (strlen)
+			ft_strlcat(temp, str, ft_strlen(str) + 1);
+		else
+			temp = NULL;
 		free_me(str);
 		return (temp);
 	}
-	if (buffer)
-		free_me(buffer);
 	return (NULL);
 }
 
@@ -65,8 +70,7 @@ char *get_next_line(int fd)
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
 	{
-		free(buffer);
-		return (NULL);
+		return (free_me(buffer));
 	}
 	chr_read = 1;
 	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
@@ -102,7 +106,7 @@ char *get_next_line(int fd)
 	str = NULL;
 	return (line);
 }
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -124,4 +128,4 @@ int main()
 		close(fd);
 	}
 	return 0;
-}
+} */

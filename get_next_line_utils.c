@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:43 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/29 17:29:51 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:27:51 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 		return (NULL);
 	ft_strlcat(joined, (char *)s1, len);
 	ft_strlcat(joined, (char *)s2, len);
-	free_me(s1);
+	free_me((char *)s1);
 	return (joined);
 }
 
