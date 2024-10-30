@@ -102,6 +102,7 @@ char *get_next_line(int fd)
 		}
 		index = ft_char_found(str, '\n');
 	}
+	index = ft_char_found(str, '\n');
 	if (index)
 	{
 		line = ft_calloc(index + 1, sizeof(char));
@@ -127,7 +128,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("test1.txt", O_RDONLY);
+	fd = open("test2.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);

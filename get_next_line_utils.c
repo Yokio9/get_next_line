@@ -94,7 +94,7 @@ void	*ft_memmove(void *dest, const void *src, int n)
 		while (++i < n)
 			((char *)dest)[i] = ((const char *)src)[i];
 		while (i < dstlen)
-			((char *)dest)[dstlen--] = '\0';
+			((char *)dest)[i++] = '\0';
 		return (dest);
 	}
 	else
