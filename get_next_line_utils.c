@@ -12,24 +12,9 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *src)
-{
-	char	*dst;
-
-	dst = (char *)malloc(sizeof(char) * (ft_strlen(src) + 1));
-	if (!dst)
-		return (NULL);
-	if (!ft_strlen(src))
-		ft_strlcpy(dst, src, 1);
-	else
-		ft_strlcpy(dst, src, ft_strlen(src) + 1);
-	return (dst);
-}
-
 char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
-	//char	*temp;
 	size_t	len;
 
 	if (!s1)
@@ -44,23 +29,6 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 		free((char *)s1);
 	s1 = NULL;
 	return (joined);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size)
-{
-	size_t	i;
-
-	i = 0;
-	if (dst_size > 0)
-	{
-		while ((src[i] || src[i] == '\n') && i < dst_size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (ft_strlen(src));
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
@@ -96,4 +64,45 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+void	*ft_calloc(size_t elem, size_t size)
+{
+	void	*p;
+
+	p = malloc(elem * size);
+	if (!p)
+		return (NULL);
+	while (elem--)
+		((char *)p)[elem] = 0;
+	return (p);
+}
+
+void	*ft_memmove(void *dest, const void *src, int n)
+{
+	int	i;
+	int	dstlen;
+
+	if (!dest && !src && n > 0)
+		return (NULL);
+	if ((dest < src) && (dest + n > src))
+	{
+		i = 0;
+		while (i < n)
+		{
+			((char *)dest)[i] = ((const char *)src)[i];
+			i++;
+		}
+		return (dest);
+	}
+	else
+	{
+		i = n;
+		dstlen = ft_strlen(dest);
+		while (n--)
+			((char *)dest)[n] = ((const char *)src)[n];
+		while (dstlen >= i)
+			((char *)dest)[dstlen--] = '\0';
+		return (dest);
+	}
 }

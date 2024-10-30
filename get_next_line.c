@@ -12,47 +12,6 @@
 
 #include "get_next_line.h"
 
-void	*ft_calloc(size_t elem, size_t size)
-{
-	void	*p;
-
-	p = malloc(elem * size);
-	if (!p)
-		return (NULL);
-	while (elem--)
-		((char *)p)[elem] = 0;
-	return (p);
-}
-
-void	*ft_memmove(void *dest, const void *src, int n)
-{
-	int	i;
-	int	dstlen;
-
-	if (!dest && !src && n > 0)
-		return (NULL);
-	if ((dest < src) && (dest + n > src))
-	{
-		i = 0;
-		while (i < n)
-		{
-			((char *)dest)[i] = ((const char *)src)[i];
-			i++;
-		}
-		return (dest);
-	}
-	else
-	{
-		i = n;
-		dstlen = ft_strlen(dest);
-		while (n--)
-			((char *)dest)[n] = ((const char *)src)[n];
-		while (dstlen >= i)
-			((char *)dest)[dstlen--] = '\0';
-		return (dest);
-	}
-}
-
 int	ft_char_found(const char *s, int c)
 {
 	int	i;
@@ -82,7 +41,10 @@ char	*last_line(char *str)
 
 	if (str)
 	{
-		temp = ft_strdup(str);
+		temp = (char *)ft_calloc(ft_strlen(str) + 1, sizeof(char));
+		if (!temp)
+			return (NULL);
+		ft_strlcat(temp, str, ft_strlen(str) + 1);
 		free_me(str);
 		return (temp);
 	}
@@ -129,7 +91,7 @@ char *get_next_line(int fd)
 			{
 				free_me(buffer);
 			}
-			ft_strlcpy(line, str, index + 1);
+			ft_strlcat(line, str, index + 1);
 			str = ft_memmove(str, str + index, ft_strlen(str) - index);
 			return (line);
 		}
