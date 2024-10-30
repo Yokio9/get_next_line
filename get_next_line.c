@@ -56,7 +56,7 @@ char	*last_line(char *str, char *buffer)
 			return (NULL);
 		index = ft_char_found(str, '\n');
 		if (index)
-			size = index
+			size = index;
 		else
 			size = strlen;
 		temp = (char *)ft_calloc(size + 1, sizeof(char));
@@ -78,13 +78,14 @@ char *get_next_line(int fd)
 	int			chr_read;
 
 	line = NULL;
+	index = 0;
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
 	{
 		return (free_me(buffer));
 	}
 	chr_read = 1;
-	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
+	while (chr_read > 0 && fd >= 0 && !index)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
 		if (chr_read < 0)
@@ -100,18 +101,18 @@ char *get_next_line(int fd)
 			return (free_me(buffer));
 		}
 		index = ft_char_found(str, '\n');
-		if (index)
+	}
+	if (index)
+	{
+		line = ft_calloc(index + 1, sizeof(char));
+		if (!line)
 		{
-			line = ft_calloc(index + 1, sizeof(char));
-			if (!line)
-			{
-				return (free_me(buffer));
-			}
-			ft_strlcat(line, str, index + 1);
-			str = ft_memmove(str, str + index, ft_strlen(str) - index);
-			free_me(buffer);
-			return (line);
+			return (free_me(buffer));
 		}
+		ft_strlcat(line, str, index + 1);
+		str = ft_memmove(str, str + index, ft_strlen(str) - index);
+		free_me(buffer);
+		return (line);
 	}
 	line = last_line(str, buffer);
 	str = NULL;
@@ -126,7 +127,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("multiple_nlx5.txt", O_RDONLY);
+	fd = open("test1.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);

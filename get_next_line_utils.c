@@ -87,20 +87,19 @@ void	*ft_memmove(void *dest, const void *src, int n)
 
 	if (!dest && !src && n > 0)
 		return (NULL);
+	dstlen = ft_strlen(dest);
 	if ((dest < src) && (dest + n > src))
 	{
-		i = 0;
-		while (i < n)
-		{
+		i = -1;
+		while (++i < n)
 			((char *)dest)[i] = ((const char *)src)[i];
-			i++;
-		}
+		while (i < dstlen)
+			((char *)dest)[dstlen--] = '\0';
 		return (dest);
 	}
 	else
 	{
 		i = n;
-		dstlen = ft_strlen(dest);
 		while (n--)
 			((char *)dest)[n] = ((const char *)src)[n];
 		while (dstlen >= i)
