@@ -18,16 +18,16 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	size_t	len;
 
 	if (!s1)
-		s1 = "";
+		s1 = (char *)ft_calloc(1, sizeof(char));
+	if (!s1)
+		return (NULL);
 	len = ft_strlen(s1) + ft_strlen(s2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
 		return (NULL);
 	ft_strlcat(joined, (char *)s1, len);
 	ft_strlcat(joined, (char *)s2, len);
-	if (*s1)
-		free((char *)s1);
-	s1 = NULL;
+	free_me(s1);
 	return (joined);
 }
 

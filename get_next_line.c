@@ -72,8 +72,7 @@ char *get_next_line(int fd)
 		chr_read = read(fd, buffer, BUFFER_SIZE);
 		if (chr_read < 0)
 		{
-			free(buffer);
-			return (NULL);
+			return (free_me(buffer));
 		}
 		if (chr_read == 0)
 			break;
@@ -89,10 +88,11 @@ char *get_next_line(int fd)
 			line = ft_calloc(index + 1, sizeof(char));
 			if (!line)
 			{
-				free_me(buffer);
+				return (free_me(buffer));
 			}
 			ft_strlcat(line, str, index + 1);
 			str = ft_memmove(str, str + index, ft_strlen(str) - index);
+			free_me(buffer);
 			return (line);
 		}
 	}
