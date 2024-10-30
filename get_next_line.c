@@ -44,6 +44,8 @@ char	*last_line(char *str, char *buffer)
 {
 	char *temp;
 	int	strlen;
+	int	index;
+	int	size;
 
 	if (buffer)
 		free_me(buffer);
@@ -52,10 +54,15 @@ char	*last_line(char *str, char *buffer)
 		strlen = ft_strlen(str);
 		if (!strlen)
 			return (NULL);
-		temp = (char *)ft_calloc(strlen + 1, sizeof(char));
+		index = ft_char_found(str, '\n');
+		if (index)
+			size = index
+		else
+			size = strlen;
+		temp = (char *)ft_calloc(size + 1, sizeof(char));
 		if (!temp)
 			return (NULL);
-		ft_strlcat(temp, str, ft_strlen(str) + 1);
+		ft_strlcat(temp, str, size + 1);
 		free_me(str);
 		return (temp);
 	}
