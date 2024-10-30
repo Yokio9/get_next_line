@@ -24,9 +24,10 @@ void	*ft_calloc(size_t elem, size_t size)
 	return (p);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, int n)
 {
-	size_t	i;
+	int	i;
+	int	dstlen;
 
 	if (!dest && !src && n > 0)
 		return (NULL);
@@ -42,8 +43,12 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	else
 	{
+		i = n;
+		dstlen = ft_strlen(dest);
 		while (n--)
 			((char *)dest)[n] = ((const char *)src)[n];
+		while (dstlen >= i)
+			((char *)dest)[dstlen--] = '\0';
 		return (dest);
 	}
 }
@@ -71,6 +76,19 @@ void	*free_me(char *str)
 	return (NULL);
 }
 
+char	*last_line(char *str)
+{
+	char *temp;
+
+	if (str)
+	{
+		temp = ft_strdup(str);
+		free_me(str);
+		return (temp);
+	}
+	return (NULL);
+}
+
 char *get_next_line(int fd)
 {
 	static char	*str;
@@ -80,7 +98,6 @@ char *get_next_line(int fd)
 	int			chr_read;
 
 	line = NULL;
-	str = NULL;
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
 	{
@@ -91,10 +108,13 @@ char *get_next_line(int fd)
 	while (chr_read > 0 && fd >= 0 && BUFFER_SIZE > 0)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
-		if (!chr_read)
+		if (chr_read < 0)
+		{
+			free(buffer);
+			return (NULL);
+		}
+		if (chr_read == 0)
 			break;
-/* 		if (chr_read <= 0 && !str)
-			free_me(buffer); */
 		buffer[chr_read] = '\0';
 		str = gnl_strjoin(str, buffer);
 		if (!str)
@@ -110,13 +130,13 @@ char *get_next_line(int fd)
 				free_me(buffer);
 			}
 			ft_strlcpy(line, str, index + 1);
-			str = ft_memmove(str, str + index, ft_strlen(str - index));
-			//line = management(index, &line, &str, &buffer);
+			str = ft_memmove(str, str + index, ft_strlen(str) - index);
 			return (line);
 		}
 	}
-	return (str);
-	//return (lst_chr(buffer, &line, &str));
+	line = last_line(str);
+	str = NULL;
+	return (line);
 }
 
 #include <stdio.h>

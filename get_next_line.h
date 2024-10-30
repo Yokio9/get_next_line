@@ -18,6 +18,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memset(void *s, int c, size_t n);
 char	*lst_chr(char *buffer, char **line, char **str);
 char	*management(int index, char **line, char **str, char **buffer);
-void	*ft_memmove(void *dest, const void *src, size_t n);
+void	*ft_memmove(void *dest, const void *src, int n);
+void	*ft_calloc(size_t elem, size_t size);
+char	*last_line(char *str);
 
 #endif

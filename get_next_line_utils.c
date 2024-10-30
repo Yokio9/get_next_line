@@ -34,11 +34,10 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 
 	if (!s1)
 		s1 = "";
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	joined = (char *)malloc(sizeof(char) * len);
+	len = ft_strlen(s1) + ft_strlen(s2) + 2;
+	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
 		return (NULL);
-	joined[0] = '\0';
 	ft_strlcat(joined, (char *)s1, len);
 	ft_strlcat(joined, (char *)s2, len);
 	if (*s1)
