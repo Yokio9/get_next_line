@@ -90,10 +90,11 @@ char *get_next_line(int fd)
 			line = ft_calloc(index + 1, sizeof(char));
 			if (!line)
 			{
-				free_me(buffer);
+				return (free_me(buffer));
 			}
 			ft_strlcat(line, str, index + 1);
 			str = ft_memmove(str, str + index, ft_strlen(str) - index);
+			free_me(buffer);
 			return (line);
 		}
 	}
