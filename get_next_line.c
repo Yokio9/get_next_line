@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/30 14:47:39 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:22:45 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int	ft_char_found(const char *s, int c)
 
 void	*free_me(char *str)
 {
+	int	i;
+
+	i = ft_strlen(str);
+	while (i--)
+		(str)[i] = 0;
 	free(str);
 	str = NULL;
 	return (NULL);
@@ -45,13 +50,12 @@ char	*last_line(char *str, char *buffer)
 	if (str)
 	{
 		strlen = ft_strlen(str);
+		if (!strlen)
+			return (NULL);
 		temp = (char *)ft_calloc(strlen + 1, sizeof(char));
 		if (!temp)
 			return (NULL);
-		if (strlen)
-			ft_strlcat(temp, str, ft_strlen(str) + 1);
-		else
-			temp = NULL;
+		ft_strlcat(temp, str, ft_strlen(str) + 1);
 		free_me(str);
 		return (temp);
 	}
@@ -106,8 +110,8 @@ char *get_next_line(int fd)
 	str = NULL;
 	return (line);
 }
-/*
-#include <stdio.h>
+
+/* #include <stdio.h>
 #include <fcntl.h>
 
 int main()
@@ -115,7 +119,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("test1.txt", O_RDONLY);
+	fd = open("variable_nls.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);
@@ -128,4 +132,5 @@ int main()
 		close(fd);
 	}
 	return 0;
-} */
+}
+ */

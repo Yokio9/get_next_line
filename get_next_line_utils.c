@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:43 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:27:51 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:56:49 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,20 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
 	size_t	len;
+	char	*str;
 
-	if (!s1)
-		s1 = (char *)ft_calloc(1, sizeof(char));
-	if (!s1)
+	str = (char *)s1;
+	if (!str)
+		str = (char *)ft_calloc(1, sizeof(char));
+	if (!str)
 		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2) + 2;
+	len = ft_strlen(str) + ft_strlen(s2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
 		return (NULL);
-	ft_strlcat(joined, (char *)s1, len);
+	ft_strlcat(joined, (char *)str, len);
 	ft_strlcat(joined, (char *)s2, len);
-	free_me((char *)s1);
+	free_me(str);
 	return (joined);
 }
 
