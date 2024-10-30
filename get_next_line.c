@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/29 17:34:41 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:17:36 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*free_me(char *str)
 	return (NULL);
 }
 
-char	*last_line(char *str)
+char	*last_line(char *str, char *buffer)
 {
 	char *temp;
 
@@ -48,6 +48,8 @@ char	*last_line(char *str)
 		free_me(str);
 		return (temp);
 	}
+	if (buffer)
+		free_me(buffer);
 	return (NULL);
 }
 
@@ -72,8 +74,7 @@ char *get_next_line(int fd)
 		chr_read = read(fd, buffer, BUFFER_SIZE);
 		if (chr_read < 0)
 		{
-			free(buffer);
-			return (NULL);
+			return (free_me(buffer));
 		}
 		if (chr_read == 0)
 			break;
@@ -96,7 +97,7 @@ char *get_next_line(int fd)
 			return (line);
 		}
 	}
-	line = last_line(str);
+	line = last_line(str, buffer);
 	str = NULL;
 	return (line);
 }
@@ -109,7 +110,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("test.txt", O_RDONLY);
+	fd = open("test1.txt", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);

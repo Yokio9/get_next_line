@@ -2,7 +2,7 @@
 #define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 999
+#define BUFFER_SIZE 1
 #endif
 
 #include <stdlib.h>
@@ -20,6 +20,6 @@ char	*lst_chr(char *buffer, char **line, char **str);
 char	*management(int index, char **line, char **str, char **buffer);
 void	*ft_memmove(void *dest, const void *src, int n);
 void	*ft_calloc(size_t elem, size_t size);
-char	*last_line(char *str);
+char	*last_line(char *str, char *buffer);
 
 #endif
