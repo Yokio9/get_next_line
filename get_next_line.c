@@ -12,37 +12,6 @@
 
 #include "get_next_line.h"
 
-int	ft_find_char(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (i + 1);
-		i++;
-	}
-	if (s[i] == (char)c)
-		return (i + 1);
-	return (0);
-}
-
-void	*free_me(char *str)
-{
-	int	i;
-
-	if (str)
-	{
-		i = ft_strlen(str);
-		while (i--)
-			(str)[i] = 0;
-		free(str);
-		str = NULL;
-	}
-	return (NULL);
-}
-
 char	*last_line(char *buffer)
 {
 	int		i;
@@ -70,40 +39,18 @@ char	*last_line(char *buffer)
 	new_buffer[j] = '\0';
 	free(buffer);
 	return (new_buffer);
-/* 	char *temp;
-	int	index;
-	int	i;
-
-	if (!*buffer)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	index = ft_find_char(buffer, '\n');
-	i = index;
-	while (buffer[index])
-		index++;
-	temp = (char *)ft_calloc(index + 1, sizeof(char));
-	if (!temp)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	ft_strlcat(temp, buffer, index - i + 1);
-	free(buffer);
-	return (temp); */
 }
 char	*first_line(char *buffer)
 {
-//	int		index;
 	char	*line;
 	int		i;
 
 	i = 0;
 	if (!buffer[i])
 		return (NULL);
-	i = ft_find_char(buffer, '\n');
-	line = ft_calloc(i + 1, sizeof(char));
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	line = ft_calloc(i + 2, sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -118,14 +65,6 @@ char	*first_line(char *buffer)
 		i++;
 	}
 	return (line);
-
-/* 	if (!*buffer)
-		return (NULL);
-	index = ft_find_char(buffer, '\n');
-	line = ft_cat(buffer, index);
-	if (!line)
-		return (NULL);
-	return (line); */
 }
 
 char	*read_line(int fd, char *buffer)
@@ -180,44 +119,7 @@ char *get_next_line(int fd)
 		return (NULL);
 	line = first_line(buffer);
 	buffer = last_line(buffer);
-/* 	if (!line)
-		return (free_me(buffer)); */
 	return (line);
-/* 	chr_read = 1;
-	while (chr_read > 0 && fd >= 0 && !index)
-	{
-		chr_read = read(fd, buffer, BUFFER_SIZE);
-		if (chr_read < 0)
-		{
-			return (free_me(buffer));
-		}
-		if (chr_read == 0)
-			break;
-		buffer[chr_read] = '\0';
-		str = gnl_strjoin(str, buffer);
-		if (!str)
-		{
-			return (free_me(buffer));
-		}
-		index = ft_char_found(str, '\n');
-	}
-	if (str)
-		index = ft_char_found(str, '\n');
-	if (index)
-	{
-		line = ft_calloc(index + 1, sizeof(char));
-		if (!line)
-		{
-			return (free_me(buffer));
-		}
-		ft_strlcat(line, str, index + 1);
-		str = ft_memmove(str, str + index, ft_strlen(str) - index);
-		free_me(buffer);
-		return (line);
-	}
-	line = last_line(str, buffer);
-	str = NULL;
-	return (line); */
 }
 
 /* #include <stdio.h>
