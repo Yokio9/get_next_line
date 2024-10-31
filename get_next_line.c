@@ -93,7 +93,7 @@ char	*last_line(char *buffer)
 	free(buffer);
 	return (temp); */
 }
-char	*get_current_line(char *buffer)
+char	*first_line(char *buffer)
 {
 //	int		index;
 	char	*line;
@@ -102,9 +102,8 @@ char	*get_current_line(char *buffer)
 	i = 0;
 	if (!buffer[i])
 		return (NULL);
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	line = ft_calloc(i + 2, sizeof(char));
+	i = ft_find_char(buffer, '\n');
+	line = ft_calloc(i + 1, sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -137,6 +136,8 @@ char	*read_line(int fd, char *buffer)
 	str = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!str)
 		return (NULL);
+	if (!buffer)
+		buffer = ft_calloc(1, sizeof(char));
 	chr_read = 1;
 	while (chr_read > 0)
 	{
@@ -177,7 +178,7 @@ char *get_next_line(int fd)
 	buffer = read_line(fd, buffer);
 	if (!buffer)
 		return (NULL);
-	line = get_current_line(buffer);
+	line = first_line(buffer);
 	buffer = last_line(buffer);
 /* 	if (!line)
 		return (free_me(buffer)); */
