@@ -28,7 +28,10 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	len = len1 + ft_strlen(str2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
-		return (free_me(str1));
+	{
+		free_me(str1);
+		return (NULL);
+	}
 	if (len1)
 		ft_strlcat(joined, str1, len);
 	ft_strlcat(joined, str2, len);
