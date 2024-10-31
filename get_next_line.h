@@ -18,9 +18,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memset(void *s, int c, size_t n);
 char	*lst_chr(char *buffer, char **line, char **str);
 char	*management(int index, char **line, char **str, char **buffer);
-void	*ft_memmove(void *dest, const void *src, int n);
+char	*move_buffer(char *buffer);
 void	*ft_calloc(size_t elem, size_t size);
-char	*last_line(char *str, char *buffer);
+char	*last_line(char *buffer);
 void	*free_me(char *str);
+char	*ft_cat(char *buffer, int index);
 
 #endif

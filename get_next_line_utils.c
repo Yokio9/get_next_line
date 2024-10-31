@@ -12,7 +12,34 @@
 
 #include "get_next_line.h"
 
-char	*gnl_strjoin(char *buffer, int index)
+char	*gnl_strjoin(const char *s1, const char *s2)
+{
+	char	*joined;
+	char	*str1;
+	char	*str2;
+	size_t	len1;
+	size_t	len;
+
+	str1 = (char *)s1;
+	str2 = (char *)s2;
+	len1 = 0;
+	if (str1)
+		len1 = ft_strlen(str1);
+	len = len1 + ft_strlen(str2) + 2;
+	joined = (char *)ft_calloc(len, sizeof(char));
+	if (!joined)
+	{
+		free_me(str1);
+		return (NULL);
+	}
+	if (len1)
+		ft_strlcat(joined, str1, len);
+	ft_strlcat(joined, str2, len);
+	free_me(str1);
+	return (joined);
+}
+
+char	*ft_cat(char *buffer, int index)
 {
 	char	*joined;
 
@@ -53,8 +80,11 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
-		i++;
+	if (s)
+	{
+		while (s[i])
+			i++;
+	}
 	return (i);
 }
 
@@ -70,30 +100,17 @@ void	*ft_calloc(size_t elem, size_t size)
 	return (p);
 }
 
-void	*ft_memmove(void *dest, const void *src, int n)
+char	*move_buffer(char *buffer)
 {
-	int	i;
-	int	dstlen;
+	char	*str;
 
-	if (!dest && !src && n > 0)
+	str = (char *)ft_calloc(ft_strlen(buffer) + 1, sizeof(char));
+	if (!str)
 		return (NULL);
-	dstlen = ft_strlen(dest);
-	if ((dest < src) && (dest + n > src))
-	{
-		i = -1;
-		while (++i < n)
-			((char *)dest)[i] = ((const char *)src)[i];
-		while (i < dstlen)
-			((char *)dest)[i++] = '\0';
-		return (dest);
-	}
+	if (!ft_strlen(buffer))
+		ft_strlcat(str, buffer, 1);
 	else
-	{
-		i = n;
-		while (n--)
-			((char *)dest)[n] = ((const char *)src)[n];
-		while (dstlen >= i)
-			((char *)dest)[dstlen--] = '\0';
-		return (dest);
-	}
+		ft_strlcat(str, buffer, ft_strlen(buffer) + 1);
+	free_me(buffer);
+	return (str);
 }

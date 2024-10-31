@@ -37,54 +37,99 @@ void	*free_me(char *str)
 		i = ft_strlen(str);
 		while (i--)
 			(str)[i] = 0;
+		free(str);
+		str = NULL;
 	}
-	free(str);
-	str = NULL;
 	return (NULL);
 }
 
-char	*last_line(char *str, char *buffer)
+char	*last_line(char *buffer)
 {
-	char *temp;
-	int	strlen;
-	int	index;
-	int	size;
+	int		i;
+	int		j;
+	char	*new_buffer;
 
-	if (buffer)
-		free_me(buffer);
-	if (str)
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (!buffer[i])
 	{
-		strlen = ft_strlen(str);
-		if (!strlen)
-			return (NULL);
-		index = ft_find_char(str, '\n');
-		if (index)
-			size = index;
-		else
-			size = strlen;
-		temp = (char *)ft_calloc(size + 1, sizeof(char));
-		if (!temp)
-			return (NULL);
-		ft_strlcat(temp, str, size + 1);
-		free_me(str);
-		return (temp);
+		free(buffer);
+		return (NULL);
 	}
-	return (NULL);
-}
-char	*get_current_line(char **buffer)
-{
-	int		index;
-	char	*line;
+	i++;
+	j = 0;
+	while (buffer[i + j])
+		j++;
+	new_buffer = malloc(sizeof(char) * (j + 1));
+	if (!new_buffer)
+		return (free(buffer), NULL);
+	j = -1;
+	while (buffer[i + ++j] != '\0')
+		new_buffer[j] = buffer[i + j];
+	new_buffer[j] = '\0';
+	free(buffer);
+	return (new_buffer);
+/* 	char *temp;
+	int	index;
+	int	i;
 
-	index = ft_find_char(*buffer, '\n');
-	line = gnl_strjoin(*buffer, index + 1);
+	if (!*buffer)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	index = ft_find_char(buffer, '\n');
+	i = index;
+	while (buffer[index])
+		index++;
+	temp = (char *)ft_calloc(index + 1, sizeof(char));
+	if (!temp)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	ft_strlcat(temp, buffer, index - i + 1);
+	free(buffer);
+	return (temp); */
+}
+char	*get_current_line(char *buffer)
+{
+//	int		index;
+	char	*line;
+	int		i;
+
+	i = 0;
+	if (!buffer[i])
+		return (NULL);
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	line = ft_calloc(i + 2, sizeof(char));
 	if (!line)
 		return (NULL);
-	*buffer = ft_memmove(*buffer, *buffer + index, ft_strlen(line) - index);
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+	{
+		line[i] = buffer[i];
+		i++;
+	}
+	if (buffer[i] == '\n')
+	{
+		line[i] = '\n';
+		i++;
+	}
 	return (line);
+
+/* 	if (!*buffer)
+		return (NULL);
+	index = ft_find_char(buffer, '\n');
+	line = ft_cat(buffer, index);
+	if (!line)
+		return (NULL);
+	return (line); */
 }
 
-char	read_line(int fd, char *buffer)
+char	*read_line(int fd, char *buffer)
 {
 	int		chr_read;
 	char	*str;
@@ -97,17 +142,21 @@ char	read_line(int fd, char *buffer)
 	{
 		chr_read = read(fd, str, BUFFER_SIZE);
 		if (chr_read < 0)
-			return (free_me(str));
-		if (chr_read == 0)
-			break;
+		{
+			free(str);
+			return (NULL);
+		}
 		str[chr_read] = '\0';
 		buffer = gnl_strjoin(buffer, str);
 		if (!buffer)
-			return (free_me(str));
+		{
+			free(str);
+			return (NULL);
+		}
 		if (ft_find_char(str, '\n'))
 			break;
 	}
-	free_me(str);
+	free(str);
 	return (buffer);
 }
 
@@ -117,13 +166,22 @@ char *get_next_line(int fd)
 	char		*line;
 
 	if (BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0 || fd < 0)
-		return (free_me(buffer));
+	{
+		if (buffer != NULL)
+		{
+			free(buffer);
+			buffer = NULL;
+		}
+		return (NULL);
+	}
 	buffer = read_line(fd, buffer);
 	if (!buffer)
 		return (NULL);
-	line = get_current_line(&buffer);
-	if (!line)
-		return (free_me(buffer));
+	line = get_current_line(buffer);
+	buffer = last_line(buffer);
+/* 	if (!line)
+		return (free_me(buffer)); */
+	return (line);
 /* 	chr_read = 1;
 	while (chr_read > 0 && fd >= 0 && !index)
 	{
