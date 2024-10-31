@@ -1,0 +1,8 @@
+==23928== 7 bytes in 1 blocks are definitely lost in loss record 1 of 1                                                                                                            
+==23928==    at 0x4843808: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)                     
+==23928==    by 0x10F435: ft_calloc (get_next_line_utils.c:81)                                                     
+==23928==    by 0x10F2A9: gnl_strjoin (get_next_line_utils.c:29)                                                   
+==23928==    by 0x10F0ED: get_next_line (get_next_line.c:101)                                                      
+==23928==    by 0x10AA96: gnl(int, char const*) (gnl.cpp:20)                                                       
+==23928==    by 0x10DC80: main (mandatory.cpp:79)                                                                  
+==23928==                                              
