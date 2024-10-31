@@ -17,19 +17,21 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	char	*joined;
 	size_t	len;
 	char	*str;
+	int		str_len;
 
 	str = (char *)s1;
-	if (!str)
-		str = (char *)ft_calloc(1, sizeof(char));
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str) + ft_strlen(s2) + 2;
+	str_len = 0;
+	if (str)
+		str_len = ft_strlen(str);
+	len = str_len + ft_strlen(s2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
 		return (NULL);
-	ft_strlcat(joined, (char *)str, len);
+	if (str_len)
+		ft_strlcat(joined, str, len);
 	ft_strlcat(joined, (char *)s2, len);
-	free_me(str);
+	if (str_len)
+		free_me(str);
 	return (joined);
 }
 

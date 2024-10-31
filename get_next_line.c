@@ -121,7 +121,7 @@ char *get_next_line(int fd)
 	return (line);
 }
 
-#include <stdio.h>
+/* #include <stdio.h>
 #include <fcntl.h>
 
 int main()
@@ -129,7 +129,7 @@ int main()
 	int fd;
 	char *str;
 
-	fd = open("test2.txt", O_RDONLY);
+	fd = open("42_with_nl", O_RDONLY);
 	if (fd)
 	{
 		str = get_next_line(fd);
@@ -146,4 +146,4 @@ int main()
 		close(fd);
 	}
 	return 0;
-}
+} */
