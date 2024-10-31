@@ -30,8 +30,7 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	if (str_len)
 		ft_strlcat(joined, str, len);
 	ft_strlcat(joined, (char *)s2, len);
-	if (str_len)
-		free_me(str);
+	free_me(str);
 	return (joined);
 }
 

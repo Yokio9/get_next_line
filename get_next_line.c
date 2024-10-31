@@ -32,9 +32,12 @@ void	*free_me(char *str)
 {
 	int	i;
 
-	i = ft_strlen(str);
-	while (i--)
-		(str)[i] = 0;
+	if (str)
+	{
+		i = ft_strlen(str);
+		while (i--)
+			(str)[i] = 0;
+	}
 	free(str);
 	str = NULL;
 	return (NULL);
