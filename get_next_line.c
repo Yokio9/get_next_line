@@ -102,7 +102,8 @@ char *get_next_line(int fd)
 		}
 		index = ft_char_found(str, '\n');
 	}
-	index = ft_char_found(str, '\n');
+	if (str)
+		index = ft_char_found(str, '\n');
 	if (index)
 	{
 		line = ft_calloc(index + 1, sizeof(char));
@@ -138,6 +139,10 @@ int main()
 			free(str);
 			str = get_next_line(fd);
 		}
+		if (str == NULL)
+			printf("\nstr = NULL");
+		else
+			printf("\nstr != NULL");
 		close(fd);
 	}
 	return 0;
