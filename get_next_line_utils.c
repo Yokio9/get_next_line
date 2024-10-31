@@ -15,22 +15,24 @@
 char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
+	char	*str1;
+	char	*str2;
+	size_t	len1;
 	size_t	len;
-	char	*str;
-	int		str_len;
 
-	str = (char *)s1;
-	str_len = 0;
-	if (str)
-		str_len = ft_strlen(str);
-	len = str_len + ft_strlen(s2) + 2;
+	str1 = (char *)s1;
+	str2 = (char *)s2;
+	len1 = 0;
+	if (str1)
+		len1 = ft_strlen(str1);
+	len = len1 + ft_strlen(str2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
-		return (NULL);
-	if (str_len)
-		ft_strlcat(joined, str, len);
-	ft_strlcat(joined, (char *)s2, len);
-	free_me(str);
+		return (free_me(str1));
+	if (len1)
+		ft_strlcat(joined, str1, len);
+	ft_strlcat(joined, str2, len);
+	free_me(str1);
 	return (joined);
 }
 
