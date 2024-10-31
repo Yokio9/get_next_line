@@ -12,57 +12,15 @@
 
 #include "get_next_line.h"
 
-/* char	*gnl_strjoin(const char *s1, const char *s2)
+char	*gnl_strjoin(char *buffer, int index)
 {
 	char	*joined;
-	char	*str1;
-	char	*str2;
-	size_t	len1;
-	size_t	len;
 
-	str1 = (char *)s1;
-	str2 = (char *)s2;
-	len1 = 0;
-	if (str1)
-		len1 = ft_strlen(str1);
-	len = len1 + ft_strlen(str2) + 2;
-	joined = (char *)ft_calloc(len, sizeof(char));
+	joined = (char *)ft_calloc(index + 1, sizeof(char));
 	if (!joined)
-	{
-		free_me(str1);
 		return (NULL);
-	}
-	if (len1)
-		ft_strlcat(joined, str1, len);
-	ft_strlcat(joined, str2, len);
-	free_me(str1);
+	ft_strlcat(joined, buffer, index + 1);
 	return (joined);
-} */
-
-char	*gnl_strjoin(const char *s1, const char *s2)
-{
-	size_t	total;
-	char	*result;
-	char	*temp;
-	size_t	len1;
-
-	if (!s1 && !s2)
-		return (NULL);
-	len1 = 0;
-	if (s1)
-		len1 = ft_strlen(s1);
-	total = len1 + ft_strlen(s2);
-	result = malloc(sizeof(char) * (total + 1));
-	if (!result)
-		return (NULL);
-	temp = result;
-	if (s1)
-		while (*s1)
-			*temp++ = *s1++;
-	while (*s2)
-		*temp++ = *s2++;
-	*temp = '\0';
-	return (result);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)

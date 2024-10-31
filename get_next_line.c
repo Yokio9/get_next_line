@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int	ft_char_found(const char *s, int c)
+int	ft_find_char(const char *s, int c)
 {
 	int	i;
 
@@ -57,7 +57,7 @@ char	*last_line(char *str, char *buffer)
 		strlen = ft_strlen(str);
 		if (!strlen)
 			return (NULL);
-		index = ft_char_found(str, '\n');
+		index = ft_find_char(str, '\n');
 		if (index)
 			size = index;
 		else
@@ -71,23 +71,60 @@ char	*last_line(char *str, char *buffer)
 	}
 	return (NULL);
 }
+char	*get_current_line(char **buffer)
+{
+	int		index;
+	char	*line;
+
+	index = ft_find_char(*buffer, '\n');
+	line = gnl_strjoin(*buffer, index + 1);
+	if (!line)
+		return (NULL);
+	*buffer = ft_memmove(*buffer, *buffer + index, ft_strlen(line) - index);
+	return (line);
+}
+
+char	read_line(int fd, char *buffer)
+{
+	int		chr_read;
+	char	*str;
+
+	str = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+	if (!str)
+		return (NULL);
+	chr_read = 1;
+	while (chr_read > 0)
+	{
+		chr_read = read(fd, str, BUFFER_SIZE);
+		if (chr_read < 0)
+			return (free_me(str));
+		if (chr_read == 0)
+			break;
+		str[chr_read] = '\0';
+		buffer = gnl_strjoin(buffer, str);
+		if (!buffer)
+			return (free_me(str));
+		if (ft_find_char(str, '\n'))
+			break;
+	}
+	free_me(str);
+	return (buffer);
+}
 
 char *get_next_line(int fd)
 {
-	static char	*str;
-	char		*buffer;
+	static char	*buffer;
 	char		*line;
-	int			index;
-	int			chr_read;
 
-	line = NULL;
-	index = 0;
-	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
-	if (!buffer || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
-	{
+	if (BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0 || fd < 0)
 		return (free_me(buffer));
-	}
-	chr_read = 1;
+	buffer = read_line(fd, buffer);
+	if (!buffer)
+		return (NULL);
+	line = get_current_line(&buffer);
+	if (!line)
+		return (free_me(buffer));
+/* 	chr_read = 1;
 	while (chr_read > 0 && fd >= 0 && !index)
 	{
 		chr_read = read(fd, buffer, BUFFER_SIZE);
@@ -121,7 +158,7 @@ char *get_next_line(int fd)
 	}
 	line = last_line(str, buffer);
 	str = NULL;
-	return (line);
+	return (line); */
 }
 
 /* #include <stdio.h>
