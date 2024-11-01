@@ -120,23 +120,23 @@ char	*read_line(int fd, char *buffer)
 
 char *get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[MAX_FD];
 	char		*line;
 
-	if (BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || read(fd, buffer[MAX_FD], 0) < 0 || fd < 0)
 	{
-		if (buffer != NULL)
+		if (buffer[MAX_FD] != NULL)
 		{
-			free(buffer);
-			buffer = NULL;
+			free(buffer[MAX_FD]);
+			buffer[MAX_FD] = NULL;
 		}
 		return (NULL);
 	}
-	buffer = read_line(fd, buffer);
-	if (!buffer)
+	buffer[MAX_FD] = read_line(fd, buffer[MAX_FD]);
+	if (!buffer[MAX_FD])
 		return (NULL);
-	line = first_line(buffer);
-	buffer = last_line(buffer);
+	line = first_line(buffer[MAX_FD]);
+	buffer[MAX_FD] = last_line(buffer[MAX_FD]);
 	return (line);
 }
 /*
