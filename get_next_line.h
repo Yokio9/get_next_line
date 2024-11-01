@@ -21,7 +21,7 @@ char	*management(int index, char **line, char **str, char **buffer);
 char	*move_buffer(char *buffer);
 void	*ft_calloc(size_t elem, size_t size);
 char	*last_line(char *buffer);
-void	*free_me(char *str);
+char	*free_me(char *str);
 char	*ft_cat(char *buffer, int index);
 char	*fill_line(char *buffer, int i);
 

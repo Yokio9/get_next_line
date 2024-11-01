@@ -6,13 +6,13 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:43 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/11/01 10:37:44 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:22:34 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
- char	*gnl_strjoin(const char *s1, const char *s2)
+char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
 	char	*str1;
@@ -28,10 +28,7 @@
 	len = len1 + ft_strlen(str2) + 2;
 	joined = (char *)ft_calloc(len, sizeof(char));
 	if (!joined)
-	{
-		free(str1);
-		return (NULL);
-	}
+		return (free_me(str1));
 	if (len1)
 		ft_strlcat(joined, str1, len);
 	ft_strlcat(joined, str2, len);
@@ -39,16 +36,11 @@
 	return (joined);
 }
 
-/*char	*ft_cat(char *buffer, int index)
+char	*free_me(char *str)
 {
-	char	*joined;
-
-	joined = (char *)ft_calloc(index + 1, sizeof(char));
-	if (!joined)
-		return (NULL);
-	ft_strlcat(joined, buffer, index + 1);
-	return (joined);
-} */
+	free(str);
+	return (NULL);
+}
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
@@ -99,18 +91,3 @@ void	*ft_calloc(size_t elem, size_t size)
 		((char *)p)[elem] = 0;
 	return (p);
 }
-
-/* char	*move_buffer(char *buffer)
-{
-	char	*str;
-
-	str = (char *)ft_calloc(ft_strlen(buffer) + 1, sizeof(char));
-	if (!str)
-		return (NULL);
-	if (!ft_strlen(buffer))
-		ft_strlcat(str, buffer, 1);
-	else
-		ft_strlcat(str, buffer, ft_strlen(buffer) + 1);
-	free_me(buffer);
-	return (str);
-} */
