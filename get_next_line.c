@@ -12,22 +12,6 @@
 
 #include "get_next_line.h"
 
-int	ft_find_char(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (i);
-		i++;
-	}
-	if (s[i] == (char)c)
-		return (i);
-	return (0);
-}
-
 char	*fill_line(char *buffer, int i)
 {
 	int		j;
@@ -67,7 +51,7 @@ char	*last_line(char *buffer)
 	return (str);
 }
 
-char	*first_line(char *buffer)
+char	*next_line(char *buffer)
 {
 	char	*line;
 	int		i;
@@ -91,7 +75,7 @@ char	*first_line(char *buffer)
 	return (line);
 }
 
-char	*read_line(int fd, char *buffer)
+char	*first_line(int fd, char *buffer)
 {
 	int		chr_read;
 	char	*str;
@@ -132,37 +116,10 @@ char *get_next_line(int fd)
 		}
 		return (NULL);
 	}
-	buffer[MAX_FD] = read_line(fd, buffer[MAX_FD]);
+	buffer[MAX_FD] = first_line(fd, buffer[MAX_FD]);
 	if (!buffer[MAX_FD])
 		return (NULL);
-	line = first_line(buffer[MAX_FD]);
+	line = next_line(buffer[MAX_FD]);
 	buffer[MAX_FD] = last_line(buffer[MAX_FD]);
 	return (line);
 }
-/*
-#include <stdio.h>
-#include <fcntl.h> // For open()
-#include "get_next_line.h"
-
-int main(void)
-{
-    int fd = open("harry.txt", O_RDONLY);
-	// Open test file in read-only mode
-    if (fd < 0)
-    {
-        perror("Error opening file");
-        return 1;
-    }
-
-    char *line;
-    while ((line = get_next_line(fd)) != NULL)
-	// Call get_next_line until it returns NULL
-    {
-        printf("Line: %s", line);
-        free(line);
-		// Free the memory allocated by get_next_line
-    }
-
-    close(fd); // Close the file after reading
-    return 0;
-} */

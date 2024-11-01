@@ -10,21 +10,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char	*ft_strdup(const char *src);
-char	*gnl_strjoin(const char *s1, const char *s2);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size);
 char	*get_next_line(int fd);
-int		ft_find_char(char *s, int c);
-size_t	ft_strlen(const char *s);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-void	*ft_memset(void *s, int c, size_t n);
-char	*lst_chr(char *buffer, char **line, char **str);
-char	*management(int index, char **line, char **str, char **buffer);
-char	*move_buffer(char *buffer);
-void	*ft_calloc(size_t elem, size_t size);
+char	*first_line(int fd, char *buffer);
+char	*next_line(char *buffer);
 char	*last_line(char *buffer);
-char	*free_me(char *str);
-char	*ft_cat(char *buffer, int index);
 char	*fill_line(char *buffer, int i);
+int		ft_find_char(char *s, int c);
+void	*ft_calloc(size_t elem, size_t size);
+size_t	ft_strlen(const char *s);
+char	*gnl_strjoin(const char *s1, const char *s2);
+char	*free_me(char *str);
 
 #endif

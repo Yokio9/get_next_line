@@ -43,55 +43,6 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	return (joined);
 }
 
-/* char	*gnl_strjoin(const char *s1, const char *s2)
-{
-	char	*joined;
-	char	*str1;
-	char	*str2;
-	size_t	len1;
-	size_t	len;
-
-	str1 = (char *)s1;
-	str2 = (char *)s2;
-	len1 = 0;
-	if (str1)
-		len1 = ft_strlen(str1);
-	len = len1 + ft_strlen(str2) + 2;
-	joined = (char *)ft_calloc(len, sizeof(char));
-	if (!joined)
-		return (free_me(str1));
-	if (len1)
-		ft_strlcat(joined, str1, len);
-	ft_strlcat(joined, str2, len);
-	free(str1);
-	return (joined);
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
-	size_t	j;
-	size_t	dst_len;
-	size_t	src_len;
-
-	i = 0;
-	j = 0;
-	while (dst[i] != '\0')
-		i++;
-	dst_len = i;
-	src_len = ft_strlen(src);
-	if (dstsize <= dst_len || dstsize == 0)
-		return (src_len + dstsize);
-	while (src[j] != '\0' && j < dstsize - dst_len - 1)
-	{
-		dst[i] = src[j];
-		i++;
-		j++;
-	}
-	dst[i] = '\0';
-	return (dst_len + src_len);
-} */
-
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -115,4 +66,20 @@ void	*ft_calloc(size_t elem, size_t size)
 	while (elem--)
 		((char *)p)[elem] = 0;
 	return (p);
+}
+
+int	ft_find_char(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return (i);
+	return (0);
 }
