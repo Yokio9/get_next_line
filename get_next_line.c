@@ -6,16 +6,34 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/10/30 17:38:12 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/11/01 10:47:09 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+char	*fill_line(char *buffer, int i)
+{
+	int		j;
+	char	*output;
+
+	j = 0;
+	while (buffer[i + j])
+		j++;
+	output = malloc(sizeof(char) * (j + 1));
+	if (!output)
+		return (free(buffer), NULL);
+	j = 0;
+	while (buffer[i + j++] != '\0')
+		output[j] = buffer[i + j];
+	output[j] = '\0';
+	free(buffer);
+	return (output);
+}
+
 char	*last_line(char *buffer)
 {
 	int		i;
-	int		j;
 	char	*new_buffer;
 
 	i = 0;
@@ -27,17 +45,9 @@ char	*last_line(char *buffer)
 		return (NULL);
 	}
 	i++;
-	j = 0;
-	while (buffer[i + j])
-		j++;
-	new_buffer = malloc(sizeof(char) * (j + 1));
+	new_buffer = fill_line(buffer, i);
 	if (!new_buffer)
 		return (free(buffer), NULL);
-	j = -1;
-	while (buffer[i + ++j] != '\0')
-		new_buffer[j] = buffer[i + j];
-	new_buffer[j] = '\0';
-	free(buffer);
 	return (new_buffer);
 }
 char	*first_line(char *buffer)
@@ -65,6 +75,21 @@ char	*first_line(char *buffer)
 		i++;
 	}
 	return (line);
+}
+int	ft_find_char(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return (i);
+	return (0);
 }
 
 char	*read_line(int fd, char *buffer)
