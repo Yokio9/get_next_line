@@ -12,7 +12,37 @@
 
 #include "get_next_line.h"
 
+char	*free_me(char *str)
+{
+	free(str);
+	return (NULL);
+}
+
 char	*gnl_strjoin(const char *s1, const char *s2)
+{
+	char	*joined;
+	size_t	len1;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	len1 = 0;
+	if (s1)
+		len1 = ft_strlen(s1);
+	joined = (char *)ft_calloc(len1 + ft_strlen(s2) + 2, sizeof(char));
+	if (!joined)
+		return (free_me((char *)s1));
+	while (s1[j])
+		joined[i++] = s1[j++];
+	j = 0;
+	while (s2[j])
+		joined[i++] = s2[j++];
+	joined[i] = '\0';
+	return (joined);
+}
+
+/* char	*gnl_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
 	char	*str1;
@@ -34,12 +64,6 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	ft_strlcat(joined, str2, len);
 	free(str1);
 	return (joined);
-}
-
-char	*free_me(char *str)
-{
-	free(str);
-	return (NULL);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
@@ -65,7 +89,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	}
 	dst[i] = '\0';
 	return (dst_len + src_len);
-}
+} */
 
 size_t	ft_strlen(const char *s)
 {

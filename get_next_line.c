@@ -139,3 +139,30 @@ char *get_next_line(int fd)
 	buffer = last_line(buffer);
 	return (line);
 }
+/*
+#include <stdio.h>
+#include <fcntl.h> // For open()
+#include "get_next_line.h"
+
+int main(void)
+{
+    int fd = open("harry.txt", O_RDONLY);
+	// Open test file in read-only mode
+    if (fd < 0)
+    {
+        perror("Error opening file");
+        return 1;
+    }
+
+    char *line;
+    while ((line = get_next_line(fd)) != NULL)
+	// Call get_next_line until it returns NULL
+    {
+        printf("Line: %s", line);
+        free(line);
+		// Free the memory allocated by get_next_line
+    }
+
+    close(fd); // Close the file after reading
+    return 0;
+} */
