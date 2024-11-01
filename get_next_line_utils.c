@@ -39,7 +39,7 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	while (s2[j])
 		joined[i++] = s2[j++];
 	joined[i] = '\0';
-	free(s1);
+	free((char *)s1);
 	return (joined);
 }
 
