@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:35 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/11/01 12:28:03 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:19:53 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,19 @@ char *get_next_line(int fd)
 	static char	*buffer[MAX_FD];
 	char		*line;
 
-	if (BUFFER_SIZE <= 0 || read(fd, buffer[MAX_FD], 0) < 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || read(fd, buffer[fd], 0) < 0 || fd < 0)
 	{
-		if (buffer[MAX_FD] != NULL)
+		if (buffer[fd] != NULL)
 		{
-			free(buffer[MAX_FD]);
-			buffer[MAX_FD] = NULL;
+			free(buffer[fd]);
+			buffer[fd] = NULL;
 		}
 		return (NULL);
 	}
-	buffer[MAX_FD] = first_line(fd, buffer[MAX_FD]);
-	if (!buffer[MAX_FD])
+	buffer[fd] = first_line(fd, buffer[fd]);
+	if (!buffer[fd])
 		return (NULL);
-	line = next_line(buffer[MAX_FD]);
-	buffer[MAX_FD] = last_line(buffer[MAX_FD]);
+	line = next_line(buffer[fd]);
+	buffer[fd] = last_line(buffer[fd]);
 	return (line);
 }

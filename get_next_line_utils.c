@@ -6,7 +6,7 @@
 /*   By: dimatayi <dimatayi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:28:43 by dimatayi          #+#    #+#             */
-/*   Updated: 2024/11/01 12:22:34 by dimatayi         ###   ########.fr       */
+/*   Updated: 2024/12/08 23:55:01 by dimatayi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,6 @@ char	*gnl_strjoin(const char *s1, const char *s2)
 	joined[i] = '\0';
 	free((char *)s1);
 	return (joined);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	if (s)
-	{
-		while (s[i])
-			i++;
-	}
-	return (i);
-}
-
-void	*ft_calloc(size_t elem, size_t size)
-{
-	void	*p;
-
-	p = malloc(elem * size);
-	if (!p)
-		return (NULL);
-	while (elem--)
-		((char *)p)[elem] = 0;
-	return (p);
 }
 
 int	ft_find_char(char *s, int c)
